@@ -5,7 +5,7 @@ import "./home.css";
 
 const HomeView: React.FC = (): JSX.Element => {
   return (
-    <div className="welcome-box-text-container">
+    <div className="container welcome-box">
       <h1>Welcome to Cat Pairs!</h1>
       <p className="welcome-box-text">
         Your task is to find the cat pairs and reach the highest possible score.
