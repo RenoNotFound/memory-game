@@ -1,7 +1,22 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+import "./home.css";
 
 const HomeView: React.FC = (): JSX.Element => {
-  return <>HomeView</>;
+  return (
+    <div className="welcome-box-text-container">
+      <h1>Welcome to Cat Pairs!</h1>
+      <p className="welcome-box-text">
+        Your task is to find the cat pairs and reach the highest possible score.
+        Take your time and develop your memory skill with this game, designed
+        for the sole purpose of learn and grow!
+      </p>
+      <Link to="/game">
+        <button className="btn-start-game">Start game</button>
+      </Link>
+    </div>
+  );
 };
 
 export default HomeView;

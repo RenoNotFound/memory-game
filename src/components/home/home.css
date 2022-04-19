@@ -1,0 +1,39 @@
+.welcome-box-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 70%;
+    margin: 0 auto;
+    padding: 2em;
+
+    text-align: center;
+    font-size: 1.3rem;
+    color: black;
+
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.welcome-box-text {
+    width: 70%;
+    margin: 1em 0 2em 0;
+}
+
+.btn-start-game {
+    background-color: #fee6e3;
+    padding: 0.8em 1.3em;
+
+    font-size: 1.4rem;
+
+    border: 3px solid black;
+    border-radius: 10px;
+
+    transition: .2s ease-in-out 0s;
+}
+
+.btn-start-game:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+  
