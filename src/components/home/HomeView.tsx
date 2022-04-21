@@ -10,10 +10,10 @@ const HomeView: React.FC = (): JSX.Element => {
       <p className="welcome-box-text">
         Your task is to find the cat pairs and reach the highest possible score.
         Take your time and develop your memory skill with this game, designed
-        for the sole purpose of learn and grow!
+        for the sole purpose of learning and growing!
       </p>
       <Link to="/game">
-        <button className="btn-start-game">Start game</button>
+        <button className="btn-start-game">Let's go!</button>
       </Link>
     </div>
   );
