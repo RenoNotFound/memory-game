@@ -142,7 +142,7 @@ const GameView: React.FC = (): JSX.Element => {
     <div className="container cards-container">
       {!startGame ? (
         <button className="btn-start-game" onClick={shuffleCards}>
-          Start
+          Start Game
         </button>
       ) : (
         <>{renderCards()}</>
