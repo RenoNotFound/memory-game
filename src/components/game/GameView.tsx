@@ -68,9 +68,6 @@ const GameView: React.FC = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-  const { cats, isLoading, error } = useSelector(catsSelector);
-
   const timer: { current: NodeJS.Timeout | null } = useRef(null);
 
   useEffect(() => {
@@ -82,12 +79,14 @@ const GameView: React.FC = (): JSX.Element => {
       if (firstChoice.url === secondChoice.url) {
         setGreenHighlight("green-highlight");
         setScore((prev) => prev + 1);
+
         const matchedCards = JSON.parse(JSON.stringify(cards));
         matchedCards.forEach((card: ICard) => {
           if (card.url === firstChoice.url) {
             return (card.matched = true);
           }
         });
+
         timer.current = setTimeout(() => {
           clearChoices();
           setGreenHighlight("");
@@ -95,7 +94,7 @@ const GameView: React.FC = (): JSX.Element => {
         }, 1000);
       } else {
         setRedHighlight("red-highlight");
-        console.log("no match");
+
         timer.current = setTimeout(() => {
           clearChoices();
           setRedHighlight("");
@@ -154,7 +153,7 @@ const GameView: React.FC = (): JSX.Element => {
   return (
     <>
       {!startGame ? (
-        <div className="button-container">
+        <div className="center-container">
           <button className="btn-start-game" onClick={shuffleCards}>
             Start Game
           </button>
@@ -170,7 +169,7 @@ const GameView: React.FC = (): JSX.Element => {
             <span className="score">
               score: {`${score} / ${cards.length / 2}`}
             </span>
-            <Timer time={30} score={score} />
+            <Timer time={40} score={score} />
           </div>
 
           <div className="container cards-container">
