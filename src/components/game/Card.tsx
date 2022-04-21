@@ -15,6 +15,7 @@ interface CardProps {
   matched: boolean;
   flipped: boolean;
   greenHighlight: string;
+  redHighlight: string;
   firstChoice: ICard | null;
   secondChoice: ICard | null;
   setFirstChoice: React.Dispatch<React.SetStateAction<ICard | null>>;
@@ -25,6 +26,7 @@ const Card: React.FC<CardProps> = ({
   card,
   flipped,
   greenHighlight,
+  redHighlight,
   firstChoice,
   secondChoice,
   setFirstChoice,
@@ -42,7 +44,9 @@ const Card: React.FC<CardProps> = ({
     <div className="cards-container" onClick={handleClick}>
       {flipped ? (
         <img
-          className={`${greenHighlight} ${card.matched ? "hidden" : ""}`}
+          className={`${greenHighlight} ${redHighlight} ${
+            card.matched ? "hidden" : ""
+          }`}
           src={card.url}
           alt="cats"
           width="150"
