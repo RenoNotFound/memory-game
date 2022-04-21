@@ -3,7 +3,7 @@
     align-items: center;
 
     text-align: center;
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     color: black;
 
     margin-top: 1.5em;
@@ -17,6 +17,7 @@
 .btn-start-game {
     background-color: #fee6e3;
     padding: 0.8em 1.3em;
+    margin: 0 0.7em;
 
     font-size: 1.4rem;
 

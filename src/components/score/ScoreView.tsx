@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
+import "./score.css";
+
 const ScoreView: React.FC = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const points: number | null = Number(searchParams.get("points"));

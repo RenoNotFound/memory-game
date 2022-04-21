@@ -51,10 +51,11 @@
     height: 40px;
 }
 
-.button-container {
+.center-container {
     display: flex;
     justify-content: center;
 
     width: 100%;
     margin-top: 13em;
 }
+
