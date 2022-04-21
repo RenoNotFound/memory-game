@@ -4,10 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { ICard, Cards } from "../../features/cards/cardsSlice";
 
 import Card from "./Card";
+import Timer from "./Timer";
 
 import "./game.css";
+import { useNavigate } from "react-router-dom";
 
-const urlsState = [
+const cardsState = [
   {
     id: "1",
     url: "https://25.media.tumblr.com/tumblr_lrztqbupaJ1qdvbl3o1_250.jpg",
@@ -56,11 +58,15 @@ const urlsState = [
 ];
 
 const GameView: React.FC = (): JSX.Element => {
-  const [cards, setCards] = useState<Cards>(urlsState);
-  const [greenHighlight, setGreenHighlight] = useState<string>("");
+  const [cards, setCards] = useState<Cards>(cardsState);
+  const [startGame, setStartGame] = useState<boolean>(false);
   const [firstChoice, setFirstChoice] = useState<ICard | null>(null);
   const [secondChoice, setSecondChoice] = useState<ICard | null>(null);
-  const [startGame, setStartGame] = useState<boolean>(false);
+  const [greenHighlight, setGreenHighlight] = useState<string>("");
+  const [redHighlight, setRedHighlight] = useState<string>("");
+  const [score, setScore] = useState<number>(0);
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { cats, isLoading, error } = useSelector(catsSelector);
@@ -68,12 +74,16 @@ const GameView: React.FC = (): JSX.Element => {
   const timer: { current: NodeJS.Timeout | null } = useRef(null);
 
   useEffect(() => {
+    if (score === cards.length / 2) {
+      navigate(`/score?points=${score}`);
+    }
+
     if (firstChoice && secondChoice) {
       if (firstChoice.url === secondChoice.url) {
-        console.log("match");
         setGreenHighlight("green-highlight");
-        const newCards = JSON.parse(JSON.stringify(cards));
-        newCards.forEach((card: ICard) => {
+        setScore((prev) => prev + 1);
+        const matchedCards = JSON.parse(JSON.stringify(cards));
+        matchedCards.forEach((card: ICard) => {
           if (card.url === firstChoice.url) {
             return (card.matched = true);
           }
@@ -81,12 +91,14 @@ const GameView: React.FC = (): JSX.Element => {
         timer.current = setTimeout(() => {
           clearChoices();
           setGreenHighlight("");
-          setCards(newCards);
+          setCards(matchedCards);
         }, 1000);
       } else {
+        setRedHighlight("red-highlight");
         console.log("no match");
         timer.current = setTimeout(() => {
           clearChoices();
+          setRedHighlight("");
         }, 1000);
       }
     }
@@ -128,6 +140,7 @@ const GameView: React.FC = (): JSX.Element => {
         key={card.id}
         card={card}
         greenHighlight={greenHighlight}
+        redHighlight={redHighlight}
         matched={card.matched}
         firstChoice={firstChoice}
         setFirstChoice={setFirstChoice}
@@ -139,15 +152,33 @@ const GameView: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="container cards-container">
+    <>
       {!startGame ? (
-        <button className="btn-start-game" onClick={shuffleCards}>
-          Start Game
-        </button>
+        <div className="button-container">
+          <button className="btn-start-game" onClick={shuffleCards}>
+            Start Game
+          </button>
+        </div>
       ) : (
-        <>{renderCards()}</>
+        <>
+          <div className="score-bar">
+            <span className="col-3">
+              <button onClick={() => window.location.reload()}>
+                <i className="fa fa-refresh fa-2x" aria-hidden="true"></i>
+              </button>
+            </span>
+            <span className="score">
+              score: {`${score} / ${cards.length / 2}`}
+            </span>
+            <Timer time={30} score={score} />
+          </div>
+
+          <div className="container cards-container">
+            <> {renderCards()}</>
+          </div>
+        </>
       )}
-    </div>
+    </>
   );
 };
 
