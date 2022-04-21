@@ -4,12 +4,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../app/store";
 import { RootState } from "../../app/rootReducer";
 
-export interface CatsState {
-  cats: Array<Cat>;
-  isLoading: boolean;
-  error: CatsError;
-}
-
 export interface Cat {
   id: string;
   categories?: Array<any>;
@@ -19,6 +13,13 @@ export interface Cat {
   height: number;
 }
 
+export interface Cats extends Array<Cat> {}
+export interface CatsState {
+  cats: Cats;
+  isLoading: boolean;
+  error: CatsError;
+}
+
 export interface CatsError {
   message: string;
 }
@@ -26,7 +27,7 @@ export interface CatsError {
 export const initialState: CatsState = {
   cats: [],
   isLoading: false,
-  error: { message: "An Error occurred" },
+  error: { message: "" },
 };
 
 export const catsSlice = createSlice({
@@ -36,7 +37,7 @@ export const catsSlice = createSlice({
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
     },
-    setCatsSuccess: (state, { payload }: PayloadAction<Array<Cat>>) => {
+    setCatsSuccess: (state, { payload }: PayloadAction<Cats>) => {
       state.cats = payload;
     },
     setCatsFailed: (state, { payload }: PayloadAction<CatsError>) => {
@@ -61,5 +62,5 @@ export const getCats = (): AppThunk => async (dispatch) => {
   }
 };
 
-export const catSelector = (state: RootState) => state.cats;
+export const catsSelector = (state: RootState) => state.cats;
 export default catsSlice.reducer;
