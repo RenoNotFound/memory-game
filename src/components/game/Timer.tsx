@@ -43,9 +43,9 @@ const Timer: React.FC<TimerProps> = ({ time, score }) => {
   }, [navigate, state.time]);
 
   return (
-    <span className="col-3">{`${state.minutes}: ${
+    <div className="col-3">{`${state.minutes}: ${
       state.seconds < 10 ? `0${state.seconds}` : `${state.seconds}`
-    }`}</span>
+    }`}</div>
   );
 };
 

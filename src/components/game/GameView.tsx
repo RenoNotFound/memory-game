@@ -11,9 +11,16 @@ import API from "../../http-common";
 
 import "./game.css";
 
+export enum Levels {
+  easy = 90,
+  medium = 60,
+  hard = 30,
+}
+
 const GameView: React.FC = (): JSX.Element => {
   const [cards, setCards] = useState<Cards>([]);
   const [startGame, setStartGame] = useState<boolean>(false);
+  const [gameTimer, setGameTimer] = useState<number>(Levels.easy);
   const [firstChoice, setFirstChoice] = useState<ICard | null>(null);
   const [secondChoice, setSecondChoice] = useState<ICard | null>(null);
   const [greenHighlight, setGreenHighlight] = useState<string>("");
@@ -69,7 +76,8 @@ const GameView: React.FC = (): JSX.Element => {
     setSecondChoice(null);
   };
 
-  const fetchCards = (): void => {
+  const fetchCards = (difficulty: Levels): void => {
+    setGameTimer(difficulty);
     setLoading(true);
     if (cards.length === 0) {
       setLoading(true);
@@ -85,7 +93,7 @@ const GameView: React.FC = (): JSX.Element => {
   const shuffleCards = (deck: Cards): void => {
     const deckCopy: Cards = JSON.parse(JSON.stringify(deck));
     deckCopy.forEach((card) => {
-      return (card.id = card.id + String(deckCopy.length));
+      return (card.id = card.id + "copy");
     });
 
     const tempCards: Cards = [...deck, ...deckCopy];
@@ -124,26 +132,43 @@ const GameView: React.FC = (): JSX.Element => {
     <>
       {!startGame ? (
         <div className="center-container">
-          <button className="btn-start-game" onClick={fetchCards}>
-            {loading ? (
+          {loading ? (
+            <button className="btn-start-game">
               <i className="fa fa-spinner fa-spin fa-xl" aria-hidden="true"></i>
-            ) : (
-              "Start Game"
-            )}
-          </button>
+            </button>
+          ) : (
+            <>
+              <button
+                className="btn-start-game"
+                onClick={() => fetchCards(Levels.easy)}
+              >
+                Easy
+              </button>
+              <button
+                className="btn-start-game"
+                onClick={() => fetchCards(Levels.medium)}
+              >
+                Medium
+              </button>
+              <button
+                className="btn-start-game"
+                onClick={() => fetchCards(Levels.hard)}
+              >
+                Hard
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <>
           <div className="score-bar">
-            <span className="col-3">
+            <div className="col-3">
               <button onClick={() => window.location.reload()}>
                 <i className="fa fa-refresh fa-2x" aria-hidden="true"></i>
               </button>
-            </span>
-            <span className="score">
-              score: {`${score} / ${cards.length / 2}`}
-            </span>
-            <Timer time={90} score={score} />
+            </div>
+            <div className="score">{`${score} / ${cards.length / 2}`}</div>
+            <Timer time={gameTimer} score={score} />
           </div>
 
           <div className="container cards-container">
