@@ -19,7 +19,7 @@ export enum Levels {
 
 const GameView: React.FC = (): JSX.Element => {
   const [cards, setCards] = useState<Cards>([]);
-  const [startGame, setStartGame] = useState<boolean>(false);
+  const [gameStart, setGameStart] = useState<boolean>(false);
   const [gameTimer, setGameTimer] = useState<number>(Levels.easy);
   const [firstChoice, setFirstChoice] = useState<ICard | null>(null);
   const [secondChoice, setSecondChoice] = useState<ICard | null>(null);
@@ -33,12 +33,34 @@ const GameView: React.FC = (): JSX.Element => {
   const timer: { current: NodeJS.Timeout | null } = useRef(null);
 
   useEffect(() => {
+    checkGameEnd();
+    gameLogic();
+
+    return () => {
+      timer.current && clearTimeout(timer.current);
+    };
+  }, [firstChoice, secondChoice, cards]);
+
+  const clearChoices = (): void => {
+    setFirstChoice(null);
+    setSecondChoice(null);
+  };
+
+  const checkGameEnd = () => {
     if (cards.length !== 0) {
       if (score === cards.length / 2) {
         navigate(`/score?points=${score}`);
       }
     }
+  };
 
+  const startGame = (difficulty: Levels): void => {
+    setGameTimer(difficulty);
+    fetchCards();
+    setGameStart(true);
+  };
+
+  const gameLogic = (): void => {
     if (firstChoice && secondChoice) {
       if (firstChoice.url === secondChoice.url) {
         setGreenHighlight("green-highlight");
@@ -65,20 +87,9 @@ const GameView: React.FC = (): JSX.Element => {
         }, 1000);
       }
     }
-
-    return () => {
-      timer.current && clearTimeout(timer.current);
-    };
-  }, [firstChoice, secondChoice, cards]);
-
-  const clearChoices = (): void => {
-    setFirstChoice(null);
-    setSecondChoice(null);
   };
 
-  const fetchCards = (difficulty: Levels): void => {
-    setGameTimer(difficulty);
-    setLoading(true);
+  const fetchCards = (): void => {
     if (cards.length === 0) {
       setLoading(true);
       API.get<Cards>("/images/search?limit=9&size=small&order=random").then(
@@ -108,7 +119,6 @@ const GameView: React.FC = (): JSX.Element => {
     }
 
     setCards(tempCards);
-    setStartGame(true);
   };
 
   const renderCards = () => {
@@ -130,7 +140,7 @@ const GameView: React.FC = (): JSX.Element => {
 
   return (
     <>
-      {!startGame ? (
+      {!gameStart ? (
         <div className="center-container">
           {loading ? (
             <button className="btn-start-game">
@@ -140,19 +150,19 @@ const GameView: React.FC = (): JSX.Element => {
             <>
               <button
                 className="btn-start-game"
-                onClick={() => fetchCards(Levels.easy)}
+                onClick={() => startGame(Levels.easy)}
               >
                 Easy
               </button>
               <button
                 className="btn-start-game"
-                onClick={() => fetchCards(Levels.medium)}
+                onClick={() => startGame(Levels.medium)}
               >
                 Medium
               </button>
               <button
                 className="btn-start-game"
-                onClick={() => fetchCards(Levels.hard)}
+                onClick={() => startGame(Levels.hard)}
               >
                 Hard
               </button>
