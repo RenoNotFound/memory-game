@@ -48,8 +48,6 @@ const Card: React.FC<CardProps> = ({
           }`}
           src={card.url}
           alt="cats"
-          width="150"
-          height="150"
         />
       ) : (
         <img src="/back-img.png" alt="cats" width="150" height="150" />

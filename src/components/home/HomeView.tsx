@@ -13,7 +13,7 @@ const HomeView: React.FC = (): JSX.Element => {
         for the sole purpose of learning and growing!
       </p>
       <Link to="/game">
-        <button className="btn-start-game">Start game</button>
+        <button className="btn btn-start-game">Start game</button>
       </Link>
     </div>
   );

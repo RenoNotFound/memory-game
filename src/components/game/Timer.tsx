@@ -40,7 +40,7 @@ const Timer: React.FC<TimerProps> = ({ time, score }) => {
         minutes: Math.floor((state.time - 1) / 60),
       });
     }, 1000);
-  }, [navigate, state.time]);
+  }, [navigate, state.time, score]);
 
   return (
     <div className="col-3">{`${state.minutes}: ${

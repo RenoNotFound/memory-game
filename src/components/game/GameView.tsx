@@ -150,30 +150,30 @@ const GameView: React.FC = (): JSX.Element => {
       {!gameStart ? (
         <div className="center-container">
           {loading ? (
-            <button className="btn-start-game">
+            <button className="btn btn-game">
               <i className="fa fa-spinner fa-spin fa-xl" aria-hidden="true"></i>
             </button>
           ) : (
-            <>
+            <div className="btn-game-container">
               <button
-                className="btn-start-game"
+                className="btn btn-game"
                 onClick={() => startGame(Levels.easy)}
               >
                 Easy
               </button>
               <button
-                className="btn-start-game"
+                className="btn btn-game"
                 onClick={() => startGame(Levels.medium)}
               >
                 Medium
               </button>
               <button
-                className="btn-start-game"
+                className="btn btn-game"
                 onClick={() => startGame(Levels.hard)}
               >
                 Hard
               </button>
-            </>
+            </div>
           )}
         </div>
       ) : (

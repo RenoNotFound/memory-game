@@ -6,6 +6,7 @@
     font-size: 1.6rem;
     color: black;
 
+    width: 90%;
     margin-top: 1.5em;
 }
 
@@ -15,20 +16,24 @@
 }
 
 .btn-start-game {
-    background-color: #fee6e3;
-    padding: 0.8em 1.3em;
-    margin: 0 0.7em;
-
     font-size: 1.4rem;
-
-    border: 3px solid black;
-    border-radius: 10px;
-
-    transition: .2s ease-in-out 0s;
 }
 
-.btn-start-game:hover {
-    cursor: pointer;
-    transform: scale(1.1);
+@media (min-width: 360px) and (max-width: 768px) {
+    .welcome-box {
+        flex-direction: column;
+        align-items: center;
+    
+        text-align: center;
+        font-size: 1rem;
+        color: black;
+    
+        margin-top: 1.5em;
+    }
+    
+    .welcome-box-text {
+        width: 100%;
+        margin: 1em 0 2em 0;
+    }
 }
   

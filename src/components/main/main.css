@@ -22,13 +22,26 @@ header {
     display: flex;
 
     width: 70%;
-    height: 20%;
     max-height: 80%;
     margin: 0 auto;
     padding: 2em;
 
-    /* border: 3px solid black; */
     border-radius: 10px;
+}
+
+.btn {
+    background-color: #fee6e3;
+    padding: 0.8em 1.3em;
+
+    border: 3px solid black;
+    border-radius: 10px;
+
+    transition: .2s ease-in-out 0s;
+}
+
+.btn:hover {
+    cursor: pointer;
+    transform: scale(1.1);
 }
 
 .page-not-found-container {
@@ -39,3 +52,11 @@ header {
     font-size: 2.2em;
     margin-top: 2em;
 }
+
+@media (min-width: 360px) and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 1em;
+    }
+}
+

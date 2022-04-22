@@ -20,12 +20,12 @@ const ScoreView: React.FC = (): JSX.Element => {
         </p>
         <div className="buttons-container">
           <Link to="/">
-            <button className="btn-start-game">
+            <button className="btn btn-score">
               <i className="fa fa-home fa-xl" aria-hidden="true"></i> Home
             </button>
           </Link>
           <Link to="/game">
-            <button className="btn-start-game">
+            <button className="btn btn-score">
               <i className="fa fa-refresh fa-xl" aria-hidden="true"></i> New
               game
             </button>
