@@ -25,7 +25,9 @@ const Timer: React.FC<TimerProps> = ({ time, score }) => {
 
   useEffect(() => {
     if (state.time === 0) {
-      navigate(`/score?points=${score}`);
+      setTimeout(() => {
+        navigate(`/score?points=${score}`);
+      }, 1000);
     }
     setTimeout(() => {
       if (state.time === 0) {
