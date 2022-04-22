@@ -5,6 +5,7 @@ import MainLayout from "./components/main/MainLayout";
 import HomeView from "./components/home/HomeView";
 import GameView from "./components/game/GameView";
 import ScoreView from "./components/score/ScoreView";
+import PageNotFoundView from "./components/utils/PageNotFoundView";
 
 const App: React.FC = (): JSX.Element => {
   const mainRoutes = {
@@ -15,7 +16,7 @@ const App: React.FC = (): JSX.Element => {
       { path: "/", element: <HomeView /> },
       { path: "/game", element: <GameView /> },
       { path: "/score", element: <ScoreView /> },
-      // { path: "404", element: <PageNotFoundView /> },
+      { path: "404", element: <PageNotFoundView /> },
     ],
   };
 
