@@ -17,6 +17,11 @@ export enum Levels {
   hard = 30,
 }
 
+export enum Highlights {
+  green = "green-highlight",
+  red = "red-highlight",
+}
+
 const GameView: React.FC = (): JSX.Element => {
   const [cards, setCards] = useState<Cards>([]);
   const [gameStart, setGameStart] = useState<boolean>(false);
@@ -27,6 +32,8 @@ const GameView: React.FC = (): JSX.Element => {
   const [redHighlight, setRedHighlight] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const highScore: number = cards.length / 2;
 
   const navigate = useNavigate();
 
@@ -48,7 +55,7 @@ const GameView: React.FC = (): JSX.Element => {
 
   const checkGameEnd = () => {
     if (cards.length !== 0) {
-      if (score === cards.length / 2) {
+      if (score === highScore) {
         navigate(`/score?points=${score}`);
       }
     }
@@ -63,7 +70,7 @@ const GameView: React.FC = (): JSX.Element => {
   const gameLogic = (): void => {
     if (firstChoice && secondChoice) {
       if (firstChoice.url === secondChoice.url) {
-        setGreenHighlight("green-highlight");
+        setGreenHighlight(Highlights.green);
         setScore((prev) => prev + 1);
 
         const matchedCards = JSON.parse(JSON.stringify(cards));
@@ -79,7 +86,7 @@ const GameView: React.FC = (): JSX.Element => {
           setCards(matchedCards);
         }, 1000);
       } else {
-        setRedHighlight("red-highlight");
+        setRedHighlight(Highlights.red);
 
         timer.current = setTimeout(() => {
           clearChoices();
@@ -177,7 +184,7 @@ const GameView: React.FC = (): JSX.Element => {
                 <i className="fa fa-refresh fa-2x" aria-hidden="true"></i>
               </button>
             </div>
-            <div className="score">{`${score} / ${cards.length / 2}`}</div>
+            <div className="score">{`${score} / ${highScore}`}</div>
             <Timer time={gameTimer} score={score} />
           </div>
 
