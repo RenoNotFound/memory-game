@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   ICard,
-  Cards,
-  activeCardsSelector,
-  addActiveCard,
-  resetActiveCards,
+  //   activeCardsSelector,
+  //   addActiveCard,
+  //   resetActiveCards,
 } from "../../features/cards/cardsSlice";
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 
 import "./game.css";
 
