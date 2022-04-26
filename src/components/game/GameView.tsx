@@ -5,6 +5,7 @@ import { ICard, Cards } from "../../features/cards/cardsSlice";
 
 import Card from "./Card";
 import Timer from "./Timer";
+import Loader from "../utils/Loader";
 
 import { useNavigate } from "react-router-dom";
 import API from "../../http-common";
@@ -150,9 +151,7 @@ const GameView: React.FC = (): JSX.Element => {
       {!gameStart ? (
         <div className="center-container">
           {loading ? (
-            <button className="btn btn-game">
-              <i className="fa fa-spinner fa-spin fa-xl" aria-hidden="true"></i>
-            </button>
+            <Loader />
           ) : (
             <div className="btn-game-container">
               <button
@@ -188,9 +187,7 @@ const GameView: React.FC = (): JSX.Element => {
             <Timer time={gameTimer} score={score} />
           </div>
 
-          <div className="container cards-container">
-            <> {renderCards()}</>
-          </div>
+          <div className="container cards-container">{renderCards()}</div>
         </>
       )}
     </>
