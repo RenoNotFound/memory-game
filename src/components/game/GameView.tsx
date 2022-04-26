@@ -5,6 +5,7 @@ import { ICard, Cards } from "../../features/cards/cardsSlice";
 
 import Card from "./Card";
 import Timer from "./Timer";
+import DiffButtons from "./DiffButtons";
 import Loader from "../utils/Loader";
 
 import { useNavigate } from "react-router-dom";
@@ -65,6 +66,7 @@ const GameView: React.FC = (): JSX.Element => {
   const startGame = (difficulty: Levels): void => {
     setGameTimer(difficulty);
     fetchCards();
+    console.log("you");
     setGameStart(true);
   };
 
@@ -150,30 +152,7 @@ const GameView: React.FC = (): JSX.Element => {
     <>
       {!gameStart ? (
         <div className="center-container">
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="btn-game-container">
-              <button
-                className="btn btn-game"
-                onClick={() => startGame(Levels.easy)}
-              >
-                Easy
-              </button>
-              <button
-                className="btn btn-game"
-                onClick={() => startGame(Levels.medium)}
-              >
-                Medium
-              </button>
-              <button
-                className="btn btn-game"
-                onClick={() => startGame(Levels.hard)}
-              >
-                Hard
-              </button>
-            </div>
-          )}
+          {loading ? <Loader /> : <DiffButtons startGame={startGame} />}
         </div>
       ) : (
         <>
