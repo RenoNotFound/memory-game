@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 // import { getCats, catsSelector, Cat } from "../../features/cat/catsSlice";
 // import { useSelector, useDispatch } from "react-redux";
-import { ICard, Cards } from "../../features/cards/cardsSlice";
+import { ICard, Cards, ResponseData } from "../../features/cards/cardsSlice";
+import { cacheImages } from "../utils/cache/loadImage";
 
 import Card from "./Card";
 import Timer from "./Timer";
@@ -22,6 +23,7 @@ export enum Levels {
 export enum Highlights {
   green = "green-highlight",
   red = "red-highlight",
+  none = "",
 }
 
 const GameView: React.FC = (): JSX.Element => {
@@ -30,8 +32,7 @@ const GameView: React.FC = (): JSX.Element => {
   const [gameTimer, setGameTimer] = useState<number>(Levels.easy);
   const [firstChoice, setFirstChoice] = useState<ICard | null>(null);
   const [secondChoice, setSecondChoice] = useState<ICard | null>(null);
-  const [greenHighlight, setGreenHighlight] = useState<string>("");
-  const [redHighlight, setRedHighlight] = useState<string>("");
+  const [highlight, setHighlight] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -64,19 +65,18 @@ const GameView: React.FC = (): JSX.Element => {
   };
 
   const startGame = (difficulty: Levels): void => {
+    setLoading(true);
     setGameTimer(difficulty);
     fetchCards();
-    console.log("you");
-    setGameStart(true);
   };
 
   const gameLogic = (): void => {
     if (firstChoice && secondChoice) {
       if (firstChoice.url === secondChoice.url) {
-        setGreenHighlight(Highlights.green);
+        setHighlight(Highlights.green);
         setScore((prev) => prev + 1);
 
-        const matchedCards = JSON.parse(JSON.stringify(cards));
+        const matchedCards: Cards = JSON.parse(JSON.stringify(cards));
         matchedCards.forEach((card: ICard) => {
           if (card.url === firstChoice.url) {
             return (card.matched = true);
@@ -85,15 +85,23 @@ const GameView: React.FC = (): JSX.Element => {
 
         timer.current = setTimeout(() => {
           clearChoices();
-          setGreenHighlight("");
+          setHighlight(Highlights.none);
           setCards(matchedCards);
         }, 1000);
       } else {
-        setRedHighlight(Highlights.red);
+        setHighlight(Highlights.red);
+
+        const flippedCards: Cards = JSON.parse(JSON.stringify(cards));
+        flippedCards.forEach((card: ICard) => {
+          if (card.flipped) {
+            return (card.flipped = false);
+          }
+        });
 
         timer.current = setTimeout(() => {
           clearChoices();
-          setRedHighlight("");
+          setHighlight(Highlights.none);
+          setCards(flippedCards);
         }, 1000);
       }
     }
@@ -101,17 +109,25 @@ const GameView: React.FC = (): JSX.Element => {
 
   const fetchCards = (): void => {
     if (cards.length === 0) {
-      setLoading(true);
-      API.get<Cards>("/images/search?limit=9&size=small&order=random").then(
-        (response) => {
-          shuffleCards(response.data);
-          setLoading(false);
-        }
-      );
+      API.get<Array<ResponseData>>(
+        "/images/search?limit=9&size=small&order=random"
+      ).then((response) => {
+        const cards = response.data.map(({ id, url, ...rest }) => {
+          return { id, url };
+        });
+        shuffleCards(cards);
+        cacheImages(
+          cards.map(({ url }) => {
+            return url;
+          })
+        );
+        setLoading(false);
+        setGameStart(true);
+      });
     }
   };
 
-  const shuffleCards = (deck: Cards): void => {
+  const shuffleCards = (deck: Array<ResponseData>): void => {
     const deckCopy: Cards = JSON.parse(JSON.stringify(deck));
     deckCopy.forEach((card) => {
       return (card.id = card.id + "copy");
@@ -136,14 +152,11 @@ const GameView: React.FC = (): JSX.Element => {
       <Card
         key={card.id}
         card={card}
-        greenHighlight={greenHighlight}
-        redHighlight={redHighlight}
-        matched={card.matched}
+        highlight={highlight}
         firstChoice={firstChoice}
         setFirstChoice={setFirstChoice}
         secondChoice={secondChoice}
         setSecondChoice={setSecondChoice}
-        flipped={card === firstChoice || card === secondChoice || card.matched}
       />
     ));
   };
@@ -155,7 +168,13 @@ const GameView: React.FC = (): JSX.Element => {
           {loading ? <Loader /> : <DiffButtons startGame={startGame} />}
         </div>
       ) : (
-        <>
+        <Suspense
+          fallback={
+            <div className="center-container">
+              <Loader />
+            </div>
+          }
+        >
           <div className="score-bar">
             <div className="col-3">
               <button onClick={() => window.location.reload()}>
@@ -167,7 +186,7 @@ const GameView: React.FC = (): JSX.Element => {
           </div>
 
           <div className="container cards-container">{renderCards()}</div>
-        </>
+        </Suspense>
       )}
     </>
   );

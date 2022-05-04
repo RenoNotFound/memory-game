@@ -1,14 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/rootReducer";
 
-export interface ICard {
+export interface ResponseData {
   id: string;
   categories?: Array<any>;
-  breeds: Array<any>;
+  breeds?: Array<any>;
   url: string;
-  width: number;
-  height: number;
-  matched: boolean;
+  width?: number;
+  height?: number;
+}
+
+export interface ICard {
+  id: string;
+  url: string;
+  matched?: boolean;
+  flipped?: boolean;
 }
 
 export interface Cards extends Array<ICard> {}

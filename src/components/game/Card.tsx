@@ -6,15 +6,13 @@ import {
   //   resetActiveCards,
 } from "../../features/cards/cardsSlice";
 // import { useSelector, useDispatch } from "react-redux";
+import SuspenseImage from "../utils/cache/SuspenseImage";
 
 import "./game.css";
 
 interface CardProps {
   card: ICard;
-  matched: boolean;
-  flipped: boolean;
-  greenHighlight: string;
-  redHighlight: string;
+  highlight: string;
   firstChoice: ICard | null;
   secondChoice: ICard | null;
   setFirstChoice: React.Dispatch<React.SetStateAction<ICard | null>>;
@@ -23,9 +21,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({
   card,
-  flipped,
-  greenHighlight,
-  redHighlight,
+  highlight,
   firstChoice,
   secondChoice,
   setFirstChoice,
@@ -34,6 +30,7 @@ const Card: React.FC<CardProps> = ({
   const handleClick = (): void => {
     if (!(firstChoice && secondChoice)) {
       if (card !== firstChoice) {
+        card.flipped = true;
         firstChoice ? setSecondChoice(card) : setFirstChoice(card);
       }
     }
@@ -41,16 +38,20 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div className="cards-container" onClick={handleClick}>
-      {flipped ? (
-        <img
-          className={`${greenHighlight} ${redHighlight} ${
-            card.matched ? "hidden" : ""
-          }`}
+      {card.flipped ? (
+        <SuspenseImage
           src={card.url}
-          alt="cats"
+          highlight={highlight}
+          matched={card.matched}
         />
       ) : (
-        <img src="/back-img.png" alt="cats" width="150" height="150" />
+        <img
+          className={card.matched ? "hidden" : ""}
+          src="/back-img.png"
+          alt="cats"
+          width="150"
+          height="150"
+        />
       )}
     </div>
   );
