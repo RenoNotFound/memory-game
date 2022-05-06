@@ -28,10 +28,12 @@ const Card: React.FC<CardProps> = ({
   setSecondChoice,
 }): JSX.Element => {
   const handleClick = (): void => {
-    if (!(firstChoice && secondChoice)) {
-      if (card !== firstChoice) {
-        card.flipped = true;
-        firstChoice ? setSecondChoice(card) : setFirstChoice(card);
+    if (!card.matched) {
+      if (!(firstChoice && secondChoice)) {
+        if (card !== firstChoice) {
+          card.flipped = true;
+          firstChoice ? setSecondChoice(card) : setFirstChoice(card);
+        }
       }
     }
   };
